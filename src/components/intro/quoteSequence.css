@@ -1,0 +1,107 @@
+.quote-sequence{
+
+    position:fixed;
+
+    inset:0;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    pointer-events:none;
+
+    z-index:100;
+
+}
+
+.quote-line{
+
+    opacity:0;
+
+    transform:
+        translateY(35px)
+        scale(.96);
+
+    filter:blur(8px);
+
+    color:white;
+
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:clamp(1.5rem,2.3vw,2.6rem);
+
+    font-weight:400;
+
+    letter-spacing:1px;
+
+    line-height:1.6;
+
+    text-align:center;
+
+    text-shadow:
+        0 0 8px rgba(255,255,255,.25),
+        0 0 30px rgba(120,170,255,.18);
+
+}
+
+.line-2{
+
+    margin-top:18px;
+
+}
+
+.line-3{
+
+    margin-top:150px;
+
+    font-size:clamp(2rem,3vw,3.3rem);
+
+}
+
+.journey-btn{
+
+    opacity:0;
+
+    margin-top:80px;
+
+    padding:16px 42px;
+
+    border:none;
+
+    border-radius:999px;
+
+    background:rgba(255,255,255,.08);
+
+    backdrop-filter:blur(12px);
+
+    color:white;
+
+    font-size:1rem;
+
+    letter-spacing:1px;
+
+    cursor:pointer;
+
+    pointer-events:auto;
+
+    transition:.35s;
+
+    box-shadow:
+
+        0 0 25px rgba(120,180,255,.25);
+
+}
+
+.journey-btn:hover{
+
+    transform:scale(1.06);
+
+    box-shadow:
+
+        0 0 45px rgba(120,180,255,.55);
+
+}

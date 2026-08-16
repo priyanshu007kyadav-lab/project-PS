@@ -1,0 +1,75 @@
+.intro-overlay{
+
+transition:opacity 1s;
+
+position:fixed;
+
+top:0;
+left:0;
+
+width:100%;
+height:100%;
+
+display:flex;
+
+justify-content:center;
+align-items:center;
+
+background:#000;
+
+z-index:1000;
+
+}
+
+.intro-star{
+
+width:14px;
+height:14px;
+
+border-radius:50%;
+
+background:#9fdcff;
+
+box-shadow:
+
+0 0 10px #8fd9ff,
+
+0 0 30px #74d7ff,
+
+0 0 80px #4ea8ff,
+
+0 0 150px #4ea8ff;
+
+cursor:pointer;
+
+animation:pulse 2.5s infinite;
+
+}
+
+.intro-star.hover{
+
+transform:scale(1.8);
+
+}
+
+@keyframes pulse{
+
+0%{
+
+transform:scale(1);
+
+}
+
+50%{
+
+transform:scale(1.25);
+
+}
+
+100%{
+
+transform:scale(1);
+
+}
+
+}
