@@ -135,50 +135,47 @@ export default function WelcomeBirthdayModal() {
           {!isDone && <span className="typing-cursor">|</span>}
         </div>
 
-        {/* Pure Liquid Glass Begin Journey / Skip Button */}
-        <button
-          style={{
-            position: "relative",
-            zIndex: 2,
-            marginTop: "6px",
-            background: "linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.08) 100%)",
-            border: "1px solid rgba(255, 255, 255, 0.45)",
-            color: "#ffffff",
-            padding: "13px 44px",
-            borderRadius: "9999px",
-            fontWeight: 600,
-            fontSize: "1.04rem",
-            cursor: "pointer",
-            letterSpacing: "-0.015em",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-            boxShadow: "0 8px 25px rgba(0, 0, 0, 0.4), inset 0 1.5px 2px rgba(255, 255, 255, 0.85)",
-            transition: "all 0.22s cubic-bezier(0.16, 1, 0.3, 1)",
-            opacity: isDone ? 1 : 0.65,
-            fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = "linear-gradient(180deg, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0.16) 100%)";
-            e.currentTarget.style.transform = "scale(1.05)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = "linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.08) 100%)";
-            e.currentTarget.style.transform = "scale(1)";
-          }}
-          onMouseDown={(e) => {
-            e.currentTarget.style.transform = "scale(0.96)";
-          }}
-          onClick={() => {
-            if (!isDone) {
-              setCharCount(FULL_TEXT.length);
-              setIsDone(true);
-            } else {
+        {/* Pure Liquid Glass Begin Journey Button (Appears only after typing completes) */}
+        {isDone && (
+          <button
+            style={{
+              position: "relative",
+              zIndex: 2,
+              marginTop: "6px",
+              background: "linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.08) 100%)",
+              border: "1px solid rgba(255, 255, 255, 0.45)",
+              color: "#ffffff",
+              padding: "13px 44px",
+              borderRadius: "9999px",
+              fontWeight: 600,
+              fontSize: "1.04rem",
+              cursor: "pointer",
+              letterSpacing: "-0.015em",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              boxShadow: "0 8px 25px rgba(0, 0, 0, 0.4), inset 0 1.5px 2px rgba(255, 255, 255, 0.85)",
+              transition: "all 0.22s cubic-bezier(0.16, 1, 0.3, 1)",
+              fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif",
+              animation: "floatLiquidGlassIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "linear-gradient(180deg, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0.16) 100%)";
+              e.currentTarget.style.transform = "scale(1.05)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.08) 100%)";
+              e.currentTarget.style.transform = "scale(1)";
+            }}
+            onMouseDown={(e) => {
+              e.currentTarget.style.transform = "scale(0.96)";
+            }}
+            onClick={() => {
               startGuidedTour();
-            }
-          }}
-        >
-          {isDone ? "✨ Begin the Journey ✨" : "Skip ⏩"}
-        </button>
+            }}
+          >
+            ✨ Begin the Journey ✨
+          </button>
+        )}
       </div>
 
       <style>{`

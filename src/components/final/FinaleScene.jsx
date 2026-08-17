@@ -185,45 +185,6 @@ export default function FinaleScene() {
           {currentText}
           {!isDone && <span className="typing-cursor">|</span>}
         </div>
-
-        {/* Skip button while typing */}
-        {!isDone && (
-          <div
-            style={{
-              position: "relative",
-              zIndex: 2,
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "4px",
-            }}
-          >
-            <button
-              style={{
-                background: "linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.08) 100%)",
-                border: "1px solid rgba(255, 255, 255, 0.45)",
-                color: "#ffffff",
-                padding: "10px 38px",
-                borderRadius: "9999px",
-                fontWeight: 600,
-                fontSize: "0.98rem",
-                cursor: "pointer",
-                letterSpacing: "-0.015em",
-                backdropFilter: "blur(20px)",
-                WebkitBackdropFilter: "blur(20px)",
-                boxShadow: "0 8px 25px rgba(0, 0, 0, 0.4), inset 0 1.5px 2px rgba(255, 255, 255, 0.85)",
-                transition: "all 0.22s cubic-bezier(0.16, 1, 0.3, 1)",
-                opacity: 0.75,
-                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif",
-              }}
-              onClick={() => {
-                setCharCount(FULL_TEXT.length);
-                setIsDone(true);
-              }}
-            >
-              Skip ⏩
-            </button>
-          </div>
-        )}
       </div>
 
       <style>{`
