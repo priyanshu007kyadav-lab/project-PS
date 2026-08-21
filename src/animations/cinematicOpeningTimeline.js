@@ -7,6 +7,8 @@ import { playBackgroundAudio } from "../story/audioStore";
 
 export function playCinematicOpeningTimeline(onComplete) {
   isAnimatingCamera.active = true;
+  cameraTarget.set(0, 0, 150);
+  cameraLookAt.set(0, 0, 0);
 
   const universe = getUniverse();
   const tl = gsap.timeline({
@@ -132,6 +134,12 @@ export function playCinematicOpeningTimeline(onComplete) {
     3.6
   )
 
+  .call(() => {
+    // Reset tunnel state to avoid lingering visual offsets
+    warpState.opacity = 0;
+    warpState.speed = 0;
+    warpState.stretch = 1;
+  }, null, 6.0)
   .call(() => {
     isAnimatingCamera.active = false;
     triggerWelcomeModal(); // Triggers the bottom Explore button!

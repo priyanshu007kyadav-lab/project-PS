@@ -1,21 +1,24 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import { cameraTarget, cameraLookAt, isAnimatingCamera, cameraShake } from "../../story/CameraController";
+import { orbitControlsRef } from "./CameraRig";
 
 export default function CameraDirector() {
-  const { camera, controls } = useThree();
+  const { camera } = useThree();
 
   useFrame(() => {
+    const controls = orbitControlsRef.current;
+
     if (isAnimatingCamera.active) {
-      // Disable mouse control during camera animations to prevent tunnel view distortion
+      // Reliably disable OrbitControls during tunnel/camera animations
       if (controls && controls.enabled) {
         controls.enabled = false;
       }
 
-      // 1. Direct copy of GSAP's smooth easing vector (eliminates double-lerp lag & micro-stutter)
+      // Drive camera position directly from GSAP-animated cameraTarget
       camera.position.copy(cameraTarget);
       camera.lookAt(cameraLookAt);
 
-      // 2. High-speed lightspeed camera shake effect when active
+      // Camera shake effect during warp
       if (cameraShake.intensity > 0.001) {
         const shakeX = (Math.random() - 0.5) * cameraShake.intensity;
         const shakeY = (Math.random() - 0.5) * cameraShake.intensity;
@@ -23,14 +26,23 @@ export default function CameraDirector() {
         camera.position.y += shakeY;
       }
 
-      // 3. Keep OrbitControls target perfectly synchronized in real-time
+      // Keep OrbitControls target in sync so it doesn't snap on re-enable
       if (controls) {
         controls.target.copy(cameraLookAt);
+      }
+    } else {
+      // Animation finished – ensure clean state
+      if (cameraShake.intensity !== 0) {
+        cameraShake.intensity = 0;
+      }
+      // Re‑enable OrbitControls after a tiny defer to let GSAP finish
+      if (controls && !controls.enabled) {
+        // Align OrbitControls internal state with the final camera pose
+        controls.object.position.copy(camera.position);
+        controls.target.copy(cameraLookAt);
+        controls.enabled = true;
         controls.update();
       }
-    } else if (controls && !controls.enabled) {
-      // Re-enable OrbitControls after animation completes for 3D exploration
-      controls.enabled = true;
     }
   });
 

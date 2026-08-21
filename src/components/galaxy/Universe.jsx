@@ -25,15 +25,16 @@ export default function Universe() {
 
         group.current.visible = true;
         group.current.scale.set(1, 1, 1);
-        group.current.rotation.y = -0.15;
+        group.current.position.set(0, 0, 0);
+        group.current.rotation.set(0, 0, 0);
     }, []);
 
     useFrame((state, delta) => {
-        if (!group.current) return;
-
-        // Gentle floating motion after reveal
-        group.current.rotation.y += delta * 0.01;
-        group.current.position.y = Math.sin(state.clock.elapsedTime * 0.25) * 0.4;
+        // Floating motion applies strictly to the cosmos group after reveal, NEVER to the tunnel
+        if (cosmosGroup.current && cosmosGroup.current.visible) {
+            cosmosGroup.current.rotation.y += delta * 0.01;
+            cosmosGroup.current.position.y = Math.sin(state.clock.elapsedTime * 0.25) * 0.4;
+        }
     });
 
     return (
