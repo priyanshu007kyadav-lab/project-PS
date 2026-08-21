@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { subscribeTourStore } from "../../story/guidedTourStore";
+import { glideCameraTo } from "../../story/CameraController";
+import * as THREE from "three";
 
 const FULL_TEXT = `And... we've finally reached the end.
 
@@ -160,7 +162,15 @@ export default function FinaleScene() {
           onMouseDown={(e) => {
             e.currentTarget.style.transform = "scale(0.95)";
           }}
-          onClick={() => setDismissed(true)}
+          onClick={() => {
+            setDismissed(true);
+            // Smooth cinematic zoom-out to full galaxy overview
+            glideCameraTo(
+              new THREE.Vector3(0, 120, 380),
+              new THREE.Vector3(0, 0, 0),
+              5.0
+            );
+          }}
           title="Close"
         >
           ✕
