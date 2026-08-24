@@ -12,7 +12,7 @@ I don't know what the future holds or where life will take us. But I'm genuinely
 
 I hope you always have a reason to smile, always find happiness in the little things, and always become the person you dream of being.
 
-Happy Birthday, Prerna. ❤️
+Happy Birthday, Prerna!!🌹✨
 May this year bring you everything your heart quietly wishes for.`;
 
 export default function FinaleScene() {
