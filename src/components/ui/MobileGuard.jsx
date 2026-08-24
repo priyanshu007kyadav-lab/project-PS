@@ -1,29 +1,34 @@
 import { useEffect, useState } from "react";
 
 export default function MobileGuard() {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isPhone, setIsPhone] = useState(false);
 
   useEffect(() => {
-    const checkMobile = () => {
-      const isMobileWidth = window.innerWidth < 768;
-      const isMobileAgent =
-        /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent
-        );
-      const isTouch = "ontouchstart" in window && window.innerWidth < 768;
-      setIsMobile(isMobileWidth || isMobileAgent || isTouch);
+    const checkDevice = () => {
+      const minDimension = Math.min(window.innerWidth, window.innerHeight);
+      const isPhoneAgent = /iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+      const isAndroidPhone =
+        /Android/i.test(navigator.userAgent) && /Mobile/i.test(navigator.userAgent);
+
+      // Tablets have minDimension >= 600px (e.g., iPad is 768px+)
+      // Mobile phones have minDimension < 600px (usually 360px - 430px)
+      const isPhoneScreen = minDimension < 600;
+
+      setIsPhone(isPhoneScreen || isPhoneAgent || isAndroidPhone);
     };
 
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    window.addEventListener("orientationchange", checkMobile);
+    checkDevice();
+    window.addEventListener("resize", checkDevice);
+    window.addEventListener("orientationchange", checkDevice);
     return () => {
-      window.removeEventListener("resize", checkMobile);
-      window.removeEventListener("orientationchange", checkMobile);
+      window.removeEventListener("resize", checkDevice);
+      window.removeEventListener("orientationchange", checkDevice);
     };
   }, []);
 
-  if (!isMobile) return null;
+  if (!isPhone) return null;
 
   return (
     <div
@@ -52,7 +57,7 @@ export default function MobileGuard() {
         }}
       />
 
-      {/* Ultra-Translucent Apple iOS Liquid Glass Restricted Card */}
+      {/* Ultra-Translucent Apple iOS Liquid Glass Phone Guard Card */}
       <div
         style={{
           position: "relative",
@@ -94,26 +99,6 @@ export default function MobileGuard() {
           }}
         />
 
-        {/* Laptop Badge Icon */}
-        <div
-          style={{
-            position: "relative",
-            zIndex: 2,
-            width: "68px",
-            height: "68px",
-            borderRadius: "50%",
-            background: "linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.06) 100%)",
-            border: "1px solid rgba(255, 255, 255, 0.45)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "30px",
-            boxShadow: "0 10px 25px rgba(0, 0, 0, 0.4), inset 0 1.5px 2px rgba(255, 255, 255, 0.8)",
-          }}
-        >
-          💻
-        </div>
-
         {/* Header */}
         <h2
           style={{
@@ -126,7 +111,7 @@ export default function MobileGuard() {
             letterSpacing: "-0.02em",
           }}
         >
-          Desktop & Laptop Only
+          Larger Screens Only
         </h2>
 
         {/* Informative Message */}
@@ -142,9 +127,9 @@ export default function MobileGuard() {
             letterSpacing: "-0.01em",
           }}
         >
-          This universe is crafted exclusively for big screen devices.
+          This website is crafted for larger screens.
           <br /><br />
-          Please open this link on a <strong>laptop or PC</strong> to experience the journey... ❤️
+          Please open this link on a <strong>laptop, PC, or tablet / iPad</strong> 
         </p>
       </div>
 
