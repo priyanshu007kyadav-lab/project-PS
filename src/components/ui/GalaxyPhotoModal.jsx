@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { subscribePhotoStore } from "../../story/galaxyPhotoStore";
+import { subscribePhotoStore, closeGalaxyPhoto } from "../../story/galaxyPhotoStore";
 import {
   subscribeTourStore,
   nextTourPhoto,
@@ -26,20 +26,30 @@ export default function GalaxyPhotoModal() {
     };
   }, []);
 
+  const handleClose = () => {
+    if (tour.phase === "TOUR") {
+      exitGuidedTour();
+    } else {
+      closeGalaxyPhoto();
+    }
+  };
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (!photo) return;
       if (e.key === "Escape") {
-        exitGuidedTour();
-      } else if (e.key === "ArrowRight") {
-        nextTourPhoto();
-      } else if (e.key === "ArrowLeft") {
-        prevTourPhoto();
+        handleClose();
+      } else if (tour.phase === "TOUR") {
+        if (e.key === "ArrowRight") {
+          nextTourPhoto();
+        } else if (e.key === "ArrowLeft") {
+          prevTourPhoto();
+        }
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [photo]);
+  }, [photo, tour.phase]);
 
   if (!photo) return null;
 
@@ -138,8 +148,8 @@ export default function GalaxyPhotoModal() {
           onMouseDown={(e) => {
             e.currentTarget.style.transform = "scale(0.95)";
           }}
-          onClick={exitGuidedTour}
-          title="Exit tour / Close"
+          onClick={handleClose}
+          title="Close"
         >
           ✕
         </button>
@@ -173,138 +183,140 @@ export default function GalaxyPhotoModal() {
           />
         </div>
 
-        {/* Pure Liquid Glass Navigation Toolbar */}
-        <div
-          style={{
-            position: "relative",
-            zIndex: 2,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            width: "100%",
-            padding: "4px 8px 0 8px",
-            gap: "14px",
-          }}
-        >
-          {/* Pure Liquid Glass Prev Button */}
-          <button
-            disabled={isFirst}
-            style={{
-              background: isFirst
-                ? "rgba(255, 255, 255, 0.03)"
-                : "linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.06) 100%)",
-              border: isFirst ? "1px solid rgba(255, 255, 255, 0.08)" : "1px solid rgba(255, 255, 255, 0.35)",
-              color: isFirst ? "rgba(255, 255, 255, 0.25)" : "#ffffff",
-              padding: "9px 22px",
-              borderRadius: "9999px",
-              fontSize: "0.92rem",
-              fontWeight: 600,
-              letterSpacing: "-0.01em",
-              cursor: isFirst ? "not-allowed" : "pointer",
-              transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
-              backdropFilter: "blur(16px)",
-              boxShadow: isFirst ? "none" : "0 6px 20px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.65)",
-              fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif",
-            }}
-            onMouseEnter={(e) => {
-              if (!isFirst) {
-                e.currentTarget.style.background = "linear-gradient(180deg, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0.12) 100%)";
-                e.currentTarget.style.transform = "scale(1.03)";
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!isFirst) {
-                e.currentTarget.style.background = "linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.06) 100%)";
-                e.currentTarget.style.transform = "scale(1)";
-              }
-            }}
-            onMouseDown={(e) => {
-              if (!isFirst) {
-                e.currentTarget.style.transform = "scale(0.96)";
-              }
-            }}
-            onClick={prevTourPhoto}
-          >
-            ← Prev
-          </button>
-
-          {/* Authentic iOS Liquid Glass Progress Bar Pill */}
+        {/* Pure Liquid Glass Navigation Toolbar (Only shown during Guided Tour) */}
+        {tour.phase === "TOUR" && (
           <div
             style={{
+              position: "relative",
+              zIndex: 2,
               display: "flex",
               alignItems: "center",
-              gap: "10px",
-              background: "linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(255, 255, 255, 0.06) 100%)",
-              padding: "9px 18px",
-              borderRadius: "9999px",
-              border: "1px solid rgba(255, 255, 255, 0.22)",
-              boxShadow: "inset 0 1px 1px rgba(255, 255, 255, 0.35), 0 4px 15px rgba(0, 0, 0, 0.25)",
-              backdropFilter: "blur(12px)",
+              justifyContent: "space-between",
+              width: "100%",
+              padding: "4px 8px 0 8px",
+              gap: "14px",
             }}
           >
-            {/* Track */}
+            {/* Pure Liquid Glass Prev Button */}
+            <button
+              disabled={isFirst}
+              style={{
+                background: isFirst
+                  ? "rgba(255, 255, 255, 0.03)"
+                  : "linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.06) 100%)",
+                border: isFirst ? "1px solid rgba(255, 255, 255, 0.08)" : "1px solid rgba(255, 255, 255, 0.35)",
+                color: isFirst ? "rgba(255, 255, 255, 0.25)" : "#ffffff",
+                padding: "9px 22px",
+                borderRadius: "9999px",
+                fontSize: "0.92rem",
+                fontWeight: 600,
+                letterSpacing: "-0.01em",
+                cursor: isFirst ? "not-allowed" : "pointer",
+                transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
+                backdropFilter: "blur(16px)",
+                boxShadow: isFirst ? "none" : "0 6px 20px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.65)",
+                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif",
+              }}
+              onMouseEnter={(e) => {
+                if (!isFirst) {
+                  e.currentTarget.style.background = "linear-gradient(180deg, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0.12) 100%)";
+                  e.currentTarget.style.transform = "scale(1.03)";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isFirst) {
+                  e.currentTarget.style.background = "linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.06) 100%)";
+                  e.currentTarget.style.transform = "scale(1)";
+                }
+              }}
+              onMouseDown={(e) => {
+                if (!isFirst) {
+                  e.currentTarget.style.transform = "scale(0.96)";
+                }
+              }}
+              onClick={prevTourPhoto}
+            >
+              ← Prev
+            </button>
+
+            {/* Authentic iOS Liquid Glass Progress Bar Pill */}
             <div
               style={{
-                width: "120px",
-                height: "6px",
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                background: "linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(255, 255, 255, 0.06) 100%)",
+                padding: "9px 18px",
                 borderRadius: "9999px",
-                background: "rgba(255, 255, 255, 0.16)",
-                overflow: "hidden",
-                position: "relative",
-                boxShadow: "inset 0 1px 2px rgba(0, 0, 0, 0.4)",
+                border: "1px solid rgba(255, 255, 255, 0.22)",
+                boxShadow: "inset 0 1px 1px rgba(255, 255, 255, 0.35), 0 4px 15px rgba(0, 0, 0, 0.25)",
+                backdropFilter: "blur(12px)",
               }}
             >
-              {/* Fill */}
+              {/* Track */}
               <div
                 style={{
-                  width: `${progressPercent}%`,
-                  height: "100%",
+                  width: "120px",
+                  height: "6px",
                   borderRadius: "9999px",
-                  background: "linear-gradient(90deg, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.98) 100%)",
-                  boxShadow: "0 0 10px rgba(255, 255, 255, 0.7)",
-                  transition: "width 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+                  background: "rgba(255, 255, 255, 0.16)",
+                  overflow: "hidden",
+                  position: "relative",
+                  boxShadow: "inset 0 1px 2px rgba(0, 0, 0, 0.4)",
                 }}
-              />
+              >
+                {/* Fill */}
+                <div
+                  style={{
+                    width: `${progressPercent}%`,
+                    height: "100%",
+                    borderRadius: "9999px",
+                    background: "linear-gradient(90deg, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.98) 100%)",
+                    boxShadow: "0 0 10px rgba(255, 255, 255, 0.7)",
+                    transition: "width 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+                  }}
+                />
+              </div>
             </div>
-          </div>
 
-          {/* Pure Liquid Glass Next Button */}
-          <button
-            style={{
-              background: "linear-gradient(180deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.08) 100%)",
-              border: "1px solid rgba(255, 255, 255, 0.45)",
-              borderTop: "1px solid rgba(255, 255, 255, 0.7)",
-              color: "#ffffff",
-              padding: "9px 24px",
-              borderRadius: "9999px",
-              fontSize: "0.92rem",
-              fontWeight: 600,
-              letterSpacing: "-0.01em",
-              cursor: "pointer",
-              transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
-              backdropFilter: "blur(20px)",
-              WebkitBackdropFilter: "blur(20px)",
-              boxShadow: "0 6px 22px rgba(0, 0, 0, 0.35), inset 0 1.5px 2px rgba(255, 255, 255, 0.85)",
-              fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "linear-gradient(180deg, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0.16) 100%)";
-              e.currentTarget.style.transform = "scale(1.04)";
-              e.currentTarget.style.boxShadow = "0 10px 28px rgba(0, 0, 0, 0.5), inset 0 1.5px 2px rgba(255, 255, 255, 0.95)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "linear-gradient(180deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.08) 100%)";
-              e.currentTarget.style.transform = "scale(1)";
-              e.currentTarget.style.boxShadow = "0 6px 22px rgba(0, 0, 0, 0.35), inset 0 1.5px 2px rgba(255, 255, 255, 0.85)";
-            }}
-            onMouseDown={(e) => {
-              e.currentTarget.style.transform = "scale(0.96)";
-            }}
-            onClick={nextTourPhoto}
-          >
-            Next →
-          </button>
-        </div>
+            {/* Pure Liquid Glass Next Button */}
+            <button
+              style={{
+                background: "linear-gradient(180deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.08) 100%)",
+                border: "1px solid rgba(255, 255, 255, 0.45)",
+                borderTop: "1px solid rgba(255, 255, 255, 0.7)",
+                color: "#ffffff",
+                padding: "9px 24px",
+                borderRadius: "9999px",
+                fontSize: "0.92rem",
+                fontWeight: 600,
+                letterSpacing: "-0.01em",
+                cursor: "pointer",
+                transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                boxShadow: "0 6px 22px rgba(0, 0, 0, 0.35), inset 0 1.5px 2px rgba(255, 255, 255, 0.85)",
+                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "linear-gradient(180deg, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0.16) 100%)";
+                e.currentTarget.style.transform = "scale(1.04)";
+                e.currentTarget.style.boxShadow = "0 10px 28px rgba(0, 0, 0, 0.5), inset 0 1.5px 2px rgba(255, 255, 255, 0.95)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "linear-gradient(180deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.08) 100%)";
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.boxShadow = "0 6px 22px rgba(0, 0, 0, 0.35), inset 0 1.5px 2px rgba(255, 255, 255, 0.85)";
+              }}
+              onMouseDown={(e) => {
+                e.currentTarget.style.transform = "scale(0.96)";
+              }}
+              onClick={nextTourPhoto}
+            >
+              Next →
+            </button>
+          </div>
+        )}
       </div>
 
       <style>{`

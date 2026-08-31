@@ -99,10 +99,10 @@ function InteractiveGalaxy({ photo, index, initialPosition, initialRotation, bas
         }
       }}
     >
-      {/* Invisible Raycast Click Target Sphere */}
-      <mesh visible={false}>
-        <sphereGeometry args={[7, 12, 12]} />
-        <meshBasicMaterial transparent opacity={0} />
+      {/* Invisible Raycast Click Target Sphere - generous hit area */}
+      <mesh>
+        <sphereGeometry args={[22, 16, 16]} />
+        <meshBasicMaterial transparent opacity={0} depthWrite={false} />
       </mesh>
 
       {/* Galaxy Particle System */}

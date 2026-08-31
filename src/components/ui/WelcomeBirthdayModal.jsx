@@ -7,7 +7,7 @@ Maybe every galaxy has its own Prerna.
 But out of all those universes, the most special one was born here, on Earth.
 And today, this little universe is celebrating her.
 
-Happy Birthday, Prerna 🫶`;
+`;
 
 export default function WelcomeBirthdayModal() {
   const [tour, setTour] = useState({ phase: "IDLE" });

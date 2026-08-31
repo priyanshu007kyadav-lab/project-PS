@@ -57,6 +57,6 @@ export function closeGalaxyPhoto() {
   // Immediately close modal window
   listeners.forEach((fn) => fn(null));
 
-  // Smoothly glide camera back home to universe overview position [0, 15, 60] looking at [0, 0, 0]
-  glideCameraTo(new THREE.Vector3(0, 15, 60), new THREE.Vector3(0, 0, 0), 2.8);
+  // Smoothly glide camera back home to universe overview position [0, 80, 200] looking at [0, 0, 0]
+  glideCameraTo(new THREE.Vector3(0, 120, 380), new THREE.Vector3(0, 0, 0), 2.8);
 }

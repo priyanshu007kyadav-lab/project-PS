@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { subscribeTourStore } from "../../story/guidedTourStore";
 import { glideCameraTo } from "../../story/CameraController";
 import * as THREE from "three";
@@ -12,7 +12,7 @@ I don't know what the future holds or where life will take us. But I'm genuinely
 
 I hope you always have a reason to smile, always find happiness in the little things, and always become the person you dream of being.
 
-Happy Birthday, Prerna!!🌹✨
+Happy Birthday, Prerna!!🌹🫶
 May this year bring you everything your heart quietly wishes for.`;
 
 export default function FinaleScene() {
@@ -20,11 +20,16 @@ export default function FinaleScene() {
   const [charCount, setCharCount] = useState(0);
   const [isDone, setIsDone] = useState(false);
   const [dismissed, setDismissed] = useState(false);
+  const hasShownFinaleRef = useRef(false);
 
   useEffect(() => {
     return subscribeTourStore((state) => {
       setTour(state);
-      if (state.phase === "COMPLETED") {
+      if (state.phase === "WELCOME" || state.phase === "IDLE") {
+        hasShownFinaleRef.current = false;
+        setDismissed(false);
+      } else if (state.phase === "COMPLETED" && !hasShownFinaleRef.current) {
+        hasShownFinaleRef.current = true;
         setDismissed(false);
         setCharCount(0);
         setIsDone(false);
@@ -164,6 +169,7 @@ export default function FinaleScene() {
           }}
           onClick={() => {
             setDismissed(true);
+            hasShownFinaleRef.current = true;
             // Smooth cinematic zoom-out to full galaxy overview
             glideCameraTo(
               new THREE.Vector3(0, 120, 380),
