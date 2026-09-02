@@ -11,6 +11,7 @@ import GalaxyPhotoModal from "./components/ui/GalaxyPhotoModal";
 import WelcomeBirthdayModal from "./components/ui/WelcomeBirthdayModal";
 import FinaleScene from "./components/final/FinaleScene";
 import MobileGuard from "./components/ui/MobileGuard";
+import { Analytics } from "@vercel/analytics/react";
 
 export default function App() {
   return (
@@ -46,6 +47,7 @@ export default function App() {
       <GalaxyPhotoModal />
       <FinaleScene />
       <MobileGuard />
+      <Analytics />
     </>
   );
 }
